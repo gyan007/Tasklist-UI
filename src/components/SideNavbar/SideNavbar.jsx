@@ -1,20 +1,21 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { FaTachometerAlt, FaTasks, FaUsers, FaCalendarAlt, FaUserCircle, FaBars, FaPlusCircle, FaBook } from "react-icons/fa";
+import { FaTachometerAlt, FaTasks, FaUsers, FaCalendarAlt, FaUserCircle, FaBars, FaPlusCircle, FaBook, FaArrowLeft, FaArrowRight } from "react-icons/fa";
 import "./SideNavbar.css";
 
 const SideNavbar = () => {
   const location = useLocation();
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(window.innerWidth >= 768); // Start with sidebar open on large screens
   const [isMobile, setIsMobile] = useState(window.innerWidth < 768);
 
   useEffect(() => {
     const handleResize = () => {
-      setIsMobile(window.innerWidth < 768);
-      if (window.innerWidth < 768) {
-        setIsOpen(false);  
+      const isCurrentlyMobile = window.innerWidth < 768;
+      setIsMobile(isCurrentlyMobile);
+      if (isCurrentlyMobile) {
+        setIsOpen(false);
       } else {
-        setIsOpen(true); 
+        setIsOpen(true);
       }
     };
 
@@ -34,6 +35,12 @@ const SideNavbar = () => {
     <>
       {isMobile && isOpen && (
         <div className="sidebar-backdrop active" onClick={toggleSidebar}></div>
+      )}
+
+      {isMobile && (
+        <button className={`sidebar-bottom-toggle ${isOpen ? 'open' : ''}`} onClick={toggleSidebar}>
+          {isOpen ? <FaArrowLeft /> : <FaBars />}
+        </button>
       )}
 
       <div className={isOpen ? "sidebar open" : "sidebar closed"}>
